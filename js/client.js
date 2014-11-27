@@ -38,9 +38,9 @@
 	})
 
 	/**
-	*
+	* Affichage nouveau message
 	*/
 	socket.on('newmessage', function(message) {
-
+		$('#chat-messages').append('<li> <b>' + message.user.id + '</b> (' + message.heure + 'h' + message.minute + ') : ' + message.message + '</li>');
 	});
 })(jQuery);
