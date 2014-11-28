@@ -1,4 +1,4 @@
-<html>
+﻿<html>
 <head>
 	<link rel="stylesheet" href="css/style.css">
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
@@ -7,13 +7,25 @@
 	<div class="container">
 
 		<div id="login">
-			<h1>Login</h1>
+			<h2>Login</h2>
 			<form action="" id="login-form">
-				<input type="text" name="login" id="pseudo" placeholder="Pseudo">
-				<input type="submit" value="Connexion">
+				<div class="input-group">
+					<input type="text" name="login" id="pseudo" placeholder="Pseudo" >
+					<input type="submit" value="Connexion">
+				</div>
 			</form>
 		</div>
-		
+		<h2 id="chatchat" >|\__/|<br/>
+            /&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<br/>
+           \&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/<br/>
+            /&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<br/>
+            |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br/>
+           /&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<br/>
+           \&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/<br/>
+            &nbsp;\____/<br/>
+              (&nbsp;(<br/>
+               )&nbsp;)<br />
+              (_(</h2>
 		<div id="chat">
 			<div>
 				<ul id="chat-messages">
@@ -21,8 +33,12 @@
 				</ul>
 			</div>
 			<form action="" id="chat-form">
-				<input type="text" id="message" />
+				<textarea type="text" id="message" maxlength="1000"></textarea>
 				<input type="submit" id="send" value="Envoyer">
+				<div class="checkbox">
+					<input type="checkbox" id="check-enter" checked="true"/>
+					<label for="check-enter"></label>
+				</div>
 			</form>
 		</div>
 

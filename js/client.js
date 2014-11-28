@@ -12,15 +12,30 @@
 		})
 	});
 
-	socket.on('logged', function() {
-		$('#login').fadeOut();
-		$('#chat').fadeIn();
-		$('#message').focus();
+	$('#message').on('keyup', function(e) {
+		var checked = $('#check-enter').is(':checked');
+		if (checked && e.which == 13 && ! e.shiftKey) {
+			$('#chat-form').submit();
+		}
+	});
 
+	socket.on('logged', function() {
+		$('#login').slideUp(400);
+		$('#chatchat').slideDown(400).delay(200).fadeOut(200);
+		$("body").css("background-color","#ddd");
+
+		setTimeout(function() {
+			$('#chat').fadeIn(400);
+			$('#users').fadeIn(400);
+
+			$('#message').focus();
+
+		}, 800);
+		
 	});
 
 	socket.on('newuser', function(user) {
-		$('#users').append('<p id="' + user.id + '">' + user.id + '</p>');
+		$('#users').append('<div class="user" id="' + user.id + '">' + user.id + '</div>');
 	});
 
 	socket.on('disconnected', function(user) {
