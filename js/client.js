@@ -56,6 +56,8 @@
 	* Affichage nouveau message
 	*/
 	socket.on('newmessage', function(message) {
-		$('#chat-messages').append('<li> <b>' + message.user.id + '</b> (' + message.heure + 'h' + message.minute + ') : ' + message.message + '</li>');
+		var $li = $('<li style="display:none;"> <b>' + message.user.id + '</b> (' + message.heure + 'h' + message.minute + ') : ' + message.message + '</li>');
+		$li.appendTo($('#chat-messages'));
+		$li.show();
 	});
 })(jQuery);
