@@ -27,6 +27,7 @@
 			$(this).css("background-image","url(img/chat.png)");
 			$(this).css("background-repeat","no-repeat");
 			$(this).css("background-position","right");
+			$(this).css("background-size", "auto 100%");
 			$(this).css("transition", "opacity 2s ease-in-out");
 		});
 		
