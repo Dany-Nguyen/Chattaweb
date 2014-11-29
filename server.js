@@ -1,16 +1,25 @@
-var http = require('http');
+var express = require('express');
+var app = express();
+var port = 8080;
 
-var server = http.createServer(function(req, res) {
-});
-server.listen(8080);
+var io = require('socket.io').listen(app.listen(port));
+
 console.log('Serveur: ON');
 
-var io = require('socket.io').listen(server);
+var mode = {
+	POLL : "polling";
+	LONGPOLL : "longpolling",
+	PUSH : "push"
+}
+
 var users = [];
 
+app.post("/getMessages", function(req, res){
+	console.log(req.body);
+});
 
 /**
-* Gestion d'instance d'utilisateur
+* Gestion d'instance d'utilisateur par une socket
 */
 
 io.sockets.on('connection', function(socket) {

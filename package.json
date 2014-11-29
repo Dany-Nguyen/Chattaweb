@@ -1,0 +1,25 @@
+{
+  "name": "Chattaweb",
+  "version": "0.0.0",
+  "description": "simple powerful chat",
+  "main": "server.js",
+  "dependencies": {
+    "socket.io": "~1.2.1",
+    "express": "^4.10.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dany-Nguyen/Chattaweb.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dany-Nguyen/Chattaweb/issues"
+  },
+  "homepage": "https://github.com/Dany-Nguyen/Chattaweb"
+}
