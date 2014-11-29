@@ -7,7 +7,8 @@ body {
 	font-family: "Open Sans";
 	background-color: #fff;
 
-	transition: background-color 1s;
+	transition: all 1s;
+
 }
 
 .container {
@@ -161,4 +162,8 @@ body {
 
 #chat-form input[type="checkbox"]:checked + label {
 	background-color:#eb6c5f;
+}
+
+.mon-message {
+	color: #F9690E;
 }

@@ -23,6 +23,13 @@
 		$('#login').slideUp(400);
 		$('#chatchat').slideDown(400).delay(200).fadeOut(200);
 		$("body").css("background-color","#ddd");
+		$("body").fadeTo(1000, 1, function() {
+			$(this).css("background-image","url(img/chat.png)");
+			$(this).css("background-repeat","no-repeat");
+			$(this).css("background-position","right");
+			$(this).css("transition", "opacity 2s ease-in-out");
+		});
+		
 
 		setTimeout(function() {
 			$('#chat').fadeIn(400);
@@ -56,6 +63,11 @@
 	* Affichage nouveau message
 	*/
 	socket.on('newmessage', function(message) {
-		$('#chat-messages').append('<li> <b>' + message.user.id + '</b> (' + message.heure + 'h' + message.minute + ') : ' + message.message + '</li>');
+		if (message.user.id == $('#pseudo').val()) {
+			$('#chat-messages').append('<li> <span class="mon-message"><b>' + message.user.id + '</b> (' + message.heure + 'h' + message.minute + ') :</span> ' + message.message + '</li>');
+		}	
+		else {
+			$('#chat-messages').append('<li> <b>' + message.user.id + '</b> (' + message.heure + 'h' + message.minute + ') : ' + message.message + '</li>');
+		}
 	});
 })(jQuery);
