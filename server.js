@@ -7,7 +7,7 @@ var io = require('socket.io').listen(app.listen(port));
 console.log('Serveur: ON');
 
 var mode = {
-	POLL : "polling";
+	POLL : "polling",
 	LONGPOLL : "longpolling",
 	PUSH : "push"
 }
