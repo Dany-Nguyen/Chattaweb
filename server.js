@@ -7,7 +7,7 @@ var io = require('socket.io').listen(app.listen(port));
 console.log('Serveur: ON');
 
 var mode = {
-	POLL : "polling";
+	POLL : "polling",
 	LONGPOLL : "longpolling",
 	PUSH : "push"
 }
@@ -24,7 +24,7 @@ app.post("/getMessages", function(req, res){
 
 io.sockets.on('connection', function(socket) {
 	var me = false;;
-	console.log("Nouveau utilisateur");
+	console.log("Nouvel utilisateur");
 
 	for (var k in users) {
 		socket.emit('newuser', users[k]);
