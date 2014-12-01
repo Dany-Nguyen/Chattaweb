@@ -51,31 +51,4 @@ function PollChat(uname) {
 		});
 	};
 	
-	this.getUsers = function(callback){
-		var t = this;
-		
-		$.ajax({
-			'url': 'chatCore.php',
-			'type': 'post',
-			'dataType': 'json',
-			'data': {
-				'mode': 'getUsers'
-			},
-			'timeout': 30000,
-			'cache': false,
-			'success': function(result){
-				if(result.result){
-					callback(result.message);
-				}	
-			},
-			'error': function(e){
-				console.log(e);
-			},
-			'complete': function(){
-				t.getUsers(callback);
-			}
-		});
-	};
-	}
-
 }
