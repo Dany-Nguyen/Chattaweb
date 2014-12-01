@@ -24,7 +24,7 @@ app.post("/getMessages", function(req, res){
 
 io.sockets.on('connection', function(socket) {
 	var me = false;;
-	console.log("Nouveau utilisateur");
+	console.log("Nouvel utilisateur");
 
 	for (var k in users) {
 		socket.emit('newuser', users[k]);
