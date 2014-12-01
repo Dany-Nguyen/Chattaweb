@@ -4,6 +4,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 </head>
 <body>
+	
 	<div class="container">
 
 		<div id="login">
@@ -11,6 +12,19 @@
 			<form action="" id="login-form">
 				<div class="input-group">
 					<input type="text" name="login" id="pseudo" placeholder="Pseudo" required >
+					
+					<div class="radio-wrap third">
+						<input type="radio" value="polling" class="custom-radio" id="polling" name="mode" checked="true" />
+						<label for="polling">Polling</label>
+					</div>
+					<div class="radio-wrap third">
+						<input type="radio" value="longpolling" class="custom-radio" id="longpolling" name="mode"/>
+						<label for="longpolling">Long Polling</label>
+					</div>
+					<div class="radio-wrap third">
+						<input type="radio" value="push" class="custom-radio" id="push" name="mode"/>
+						<label for="push">Push</label>
+					</div>
 					<input type="submit" value="Connexion">
 				</div>
 			</form>
@@ -48,6 +62,11 @@
 
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script>
+	if (!window.jQuery) {
+		document.write('<script src="js/jquery-1.11.1.min.js"><\/script>');
+	}
+	</script>
 	<script src="http://localhost:8080/socket.io/socket.io.js"></script>
 	<script src="js/client.js"></script>
 </body>

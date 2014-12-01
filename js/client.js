@@ -1,5 +1,7 @@
 (function($) {
+
 	var socket = io.connect('http://localhost:8080');
+
 
 	/**
 	* Connexion d'un client
@@ -7,9 +9,44 @@
 
 	$('#login-form').submit(function(event){
 		event.preventDefault();
-		socket.emit('login', {
-			pseudo: $('#pseudo').val()
-		})
+		var mode = $(this).find('input[type=radio]:checked').val();
+
+		switch(mode){
+			case "polling":
+				$.ajax({
+					url : 'http://127.0.0.1/Chattaweb/login',
+					type : 'post',
+					// dataType : 'json',
+					data : {
+						'user': $('#pseudo').val(),
+						'mode': mode
+					},
+					cache : false,
+					success : function(res){
+						if(res.okay){
+							// callback(result.message);
+							// th.version = res.version;
+						}else {
+							alert("on va tous mourrir");
+						}
+					},
+					'error': function(e){
+						// console.log(e);
+					}
+				});
+				break;
+			case "longpolling":
+				alert(mode);
+				break;
+			case "push":
+
+				socket.emit('login', {
+					pseudo: $('#pseudo').val()
+				});
+				break;
+			default:
+				alert("don't try me");
+		}
 	});
 
 	$('#message').on('keyup', function(e) {
@@ -20,26 +57,7 @@
 	});
 
 	socket.on('logged', function() {
-		$('#login').slideUp(400);
-		$('#chatchat').slideDown(400).delay(200).fadeOut(200);
-		$("body").css("background-color","#ddd");
-		$("body").fadeTo(1000, 1, function() {
-			$(this).css("background-image","url(img/chat.png)");
-			$(this).css("background-repeat","no-repeat");
-			$(this).css("background-position","right");
-			$(this).css("background-size", "auto 100%");
-			$(this).css("transition", "opacity 2s ease-in-out");
-		});
-		
-
-		setTimeout(function() {
-			$('#chat').fadeIn(400);
-			$('#users').fadeIn(400);
-
-			$('#message').focus();
-
-		}, 800);
-		
+		logMe();
 	});
 
 	socket.on('newuser', function(user) {
@@ -58,7 +76,7 @@
 		socket.emit('newmessage', {message: $('#message').val() });
 		$('#message').val('');
 		$('#message').focus();
-	})
+	});
 
 	/**
 	* Affichage nouveau message
@@ -72,3 +90,30 @@
 		}
 	});
 })(jQuery);
+
+function logMe () {
+	$('#login').slideUp(400);
+	$('#chatchat').slideDown(400).delay(200).animate({
+		right : "50px",
+		opacity : 0,
+		"margin-top" : "20%",
+		"margin-right" : 0			
+	},{
+		duration:200,	
+		complete: function(){ $(this).fadeOut(); }
+	});
+	
+	$("body").addClass("logged");
+
+	$('body').prepend('<img class="chat-back" src="img/chat.png" style="opacity:0" />');
+
+	setTimeout(function() {
+		$('#chat').fadeIn(400);
+		$('#users').fadeIn(400);
+
+		$('#message').focus();
+
+		$('.chat-back').css({opacity:1});
+
+	}, 800);
+}

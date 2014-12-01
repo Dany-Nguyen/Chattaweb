@@ -1,8 +1,12 @@
 var express = require('express');
+// var bodyParser = require('body-parser')
+
 var app = express();
 var port = 8080;
 
 var io = require('socket.io').listen(app.listen(port));
+
+// app.use(bodyParser.json());
 
 console.log('Serveur: ON');
 
@@ -13,9 +17,12 @@ var mode = {
 }
 
 var users = [];
+var messages = [];
 
-app.post("/getMessages", function(req, res){
-	console.log(req.body);
+app.post('/login', function(req, res){
+	// var user = req.body.user;
+	// console.log(user);
+	res.send('hello world');
 });
 
 /**
@@ -24,7 +31,6 @@ app.post("/getMessages", function(req, res){
 
 io.sockets.on('connection', function(socket) {
 	var me = false;;
-	console.log("Nouveau utilisateur");
 
 	for (var k in users) {
 		socket.emit('newuser', users[k]);
@@ -35,6 +41,8 @@ io.sockets.on('connection', function(socket) {
 	*/
 
 	socket.on('login', function(user) {
+		console.log("Nouveau utilisateur: "+JSON.stringify(user));
+
 		me = user;
 		me.id = user.pseudo;
 		users[me.id] = me;
