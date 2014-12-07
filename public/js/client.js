@@ -58,11 +58,11 @@
 				});
 
 				socket.on('newuser', function(user) {
-					addUserView(user.id)
+					addUserView(user)
 				});
 
 				socket.on('disconnected', function(user) {
-					$('#' + user.id).remove();
+					$('#' + user).remove();
 				});
 
 				/** Affichage nouveau message */
@@ -119,13 +119,13 @@
 			cache : false,
 			success : function(res){
 				if(res.okay){
-					update();
+					if(mode === net.POLLING){ update();}
 				}else {
 					alert("on va tous mourrir:sendMessage");
 				}
 			},
 			'error': function(e){
-				console.log("ca c'est mal passé\n"+e);
+				console.log("sendMessage:ajax: ca c'est mal passé\n");
 			}
 		});
 	}
@@ -145,7 +145,7 @@
 			time = TIMEOUT_POLL;
 		}else if (mode === "longpolling"){
 			addr = 'register-lp';
-			time = 0;
+			time = 200;
 		}else {
 			alert("update: mode incorrect :"+mode);
 		}
@@ -167,7 +167,7 @@
 				}else if(res.timeout) {
 					console.log("timeout LP");
 				}else{
-					alert("on va tous mourrir : update:ajax");
+					alert("update:ajax: on va tous mourrir !");
 				}
 			},
 			'error': function(e){
@@ -233,8 +233,8 @@
 	}
 
 	function addMessageView(msg) {
-		var isme = (msg.user.id == user.id) ? "mon-message" : "";
-		$('#chat-messages').append('<li> <span class="'+isme+'"><b>' + msg.user.id + '</b> (' + msg.heure + 'h' + msg.minute + ') :</span> ' + msg.message + '</li>');
+		var isme = (msg.user == user.id) ? "mon-message" : "";
+		$('#chat-messages').append('<li> <span class="'+isme+'"><b>' + msg.user + '</b> (' + msg.heure + 'h' + msg.minute + ') :</span> ' + msg.message + '</li>');
 	}
 
 	function addUserView(uid) {
@@ -242,9 +242,6 @@
 	}
 
 
-
-
-	
 
 })(jQuery);
 

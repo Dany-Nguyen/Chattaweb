@@ -13,12 +13,11 @@ app.use(bodyParser.urlencoded({
 }));
 
 
-var timeoutLP = 30000;
 Date.now = Date.now || function() { return +new Date; };  //TO SUPPORT IE < IE9  (ES5)
 
-var users = [];
+var timeoutLP = 30000;
+var users = {};
 var messages = [];
-
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
@@ -31,8 +30,7 @@ app.post('/login',function(req, res) {
 	user.id = req.body.user;
 	user.version = messages.length;
 	user.mode = req.body.mode;
-	user.pm = [];
-
+	// user.pm = [];
 
 	users[user.id] = user;
 	
@@ -41,9 +39,7 @@ app.post('/login',function(req, res) {
 	res.send({
 		okay:true,
 		me: user,
-		users: users.map(function (u) {
-			return u.id;
-		})
+		users: Object.keys(users)
 	});	
 });
 
@@ -51,15 +47,19 @@ app.post('/login',function(req, res) {
 app.post('/sendMessage', function(req, res){
 	var message = {};
 	message.message = req.body.message;
-	message.user = req.body.user;
+	message.user = req.body.user.id;
 	date = new Date();
 	message.heure = date.getHours();
 	message.minute = date.getMinutes();
 
 	var u = req.body.user;
 	users[u.id] = u;
-
 	messages.push(message);
+
+	if(areSockClients()){
+		console.log('les sock y auront droit');
+		io.sockets.emit('newmessage', message);
+	}
 
 	res.send({
 		okay:true
@@ -67,7 +67,6 @@ app.post('/sendMessage', function(req, res){
 });
 
 app.post('/update', function(req, res){
-
 	var u = req.body.user;
 	var msgs =[];
 
@@ -93,12 +92,11 @@ app.post('/update', function(req, res){
 		nothing: isNothing,
 		me: u,
 		messages: msgs,
-		users: users
+		users: Object.keys(users)
 	});
 });
 
 app.post('/register-lp', function(req, res){
-
 	// res.connection.setTimeout(0);
 
 	var u = req.body.user;
@@ -117,18 +115,19 @@ app.post('/register-lp', function(req, res){
 			clearTimeout(lptimer);
 			clearInterval(lpInterval);
 
-			//////////////////////////////////////// 		UPDATE COPIE COLLE, C'EST SALE
+			//////////////////////////////////////// 		UPDATE
 			var u = req.body.user;
 			var msgs =[];
 			msgs = messages.slice(u.version,messages.length);
 			u.version = messages.length;
+
 			users[u.id] = u;
 
 			res.send({
 				okay: true,
 				me: u,
 				messages: msgs,
-				users: users
+				users: Object.keys(users)
 			});
 			//////////////////////////////////////:
 		}
@@ -136,7 +135,9 @@ app.post('/register-lp', function(req, res){
 	
 });
 
-
+function areSockClients() {
+	return io.sockets.sockets.length > 0;
+}
 
 
 /**
@@ -145,9 +146,9 @@ app.post('/register-lp', function(req, res){
 
 io.sockets.on('connection', function(socket) {
 	var me = false;;
-
+	
 	for (var k in users) {
-		socket.emit('newuser', users[k]);
+		socket.emit('newuser', users[k].id);
 	}
 
 	/**
@@ -161,7 +162,7 @@ io.sockets.on('connection', function(socket) {
 		me.id = user.pseudo;
 		users[me.id] = me;
 		socket.emit('logged');
-		io.sockets.emit('newuser', me);
+		io.sockets.emit('newuser', me.id);
 	});
 
 	socket.on('disconnect', function() {
@@ -169,20 +170,22 @@ io.sockets.on('connection', function(socket) {
 			return false;
 		}
 		delete users[me.id];
-		io.sockets.emit('disconnected',me);
+		io.sockets.emit('disconnected',me.id);
 	});
 
 	/**
 	* Gestion des messages
 	*/
 	socket.on('newmessage', function(message) {
-		message.user = me;
+		message.user = me.id;
 		date = new Date();
 		message.heure = date.getHours();
 		message.minute = date.getMinutes();
 
+		// mettre a jour les messages globaux
+		console.log("sock:newm msgs.len:av : "+messages.length);
 		messages.push[message];
-		
+		console.log("sock:newm msgs.len:aft : "+messages.length);
 		io.sockets.emit('newmessage', message);
 	});
 
