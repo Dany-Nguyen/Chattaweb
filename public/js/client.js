@@ -37,6 +37,8 @@
 							user = res.me;
 							logMe();
 							update();
+							sendMessage(" a rejoint la conversation");
+
 						}else {
 							alert("on va tous mourrir");
 						}

@@ -101,17 +101,19 @@ app.post('/register-lp', function(req, res){
 
 	var u = req.body.user;
 	var oldversion = u.version;
-	
+	var usersSize = Object.keys(users).length;
 	var lptimer = setTimeout(function() {
 		clearInterval(lpInterval);
 		res.send({
-			timeout:true
+			timeout:true,
+			users:Object.keys(users)
 		});
 		return;
 	},timeoutLP);
 
 	var lpInterval = setInterval(function() {
-		if(oldversion < messages.length){
+		
+		if(oldversion < messages.length ){
 			clearTimeout(lptimer);
 			clearInterval(lpInterval);
 
@@ -139,7 +141,7 @@ app.post('/disconnect',function(req, res) {
 	var user = req.body.user;
 	
 
-	if(user == users[user.id]){
+	if(user.id == users[user.id].id){
 		console.log("utilisateur parti: "+user.id);
 		delete users[user.id];
 	}else{
