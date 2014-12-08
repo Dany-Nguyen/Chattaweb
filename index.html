@@ -12,7 +12,6 @@
 			<form action="" id="login-form">
 				<div class="input-group">
 					<input type="text" name="login" id="pseudo" placeholder="Pseudo" required >
-					
 					<div class="radio-wrap third">
 						<input type="radio" value="polling" class="custom-radio" id="polling" name="mode" checked="true" />
 						<label for="polling">Polling</label>
@@ -30,44 +29,63 @@
 			</form>
 		</div>
 		<h2 id="chatchat" >|\__/|<br/>
-            /&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<br/>
-           \&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/<br/>
-            /&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<br/>
-            |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br/>
-           /&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<br/>
-           \&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/<br/>
-            &nbsp;\____/<br/>
-              (&nbsp;(<br/>
-               )&nbsp;)<br />
-              (_(</h2>
-		<div id="chat">
-			<div>
-				<ul id="chat-messages">
-					<!-- Remplit par client.js -->
-				</ul>
-			</div>
-			<form action="" id="chat-form">
-				<textarea type="text" id="message" maxlength="1000"></textarea>
-				<input type="submit" id="send" value="Envoyer">
-				<div class="checkbox">
-					<input type="checkbox" id="check-enter" checked="true"/>
-					<label for="check-enter"></label>
+			/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<br/>
+			\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/<br/>
+			/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<br/>
+			|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br/>
+			/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<br/>
+			\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/<br/>
+			&nbsp;\____/<br/>
+			(&nbsp;(<br/>
+			)&nbsp;)<br />
+			(_(</h2>
+			<div id="chat">
+				<div>
+					<ul id="chat-messages">
+						<!-- Remplit par client.js -->
+					</ul>
 				</div>
-			</form>
+				<form action="" id="chat-form">
+					<textarea type="text" id="message" maxlength="1000"></textarea>
+					<input type="submit" id="send" value="Envoyer">
+					<div class="checkbox">
+						<input type="checkbox" id="check-enter" checked="true"/>
+						<label for="check-enter"></label>
+					</div>
+				</form>
+			</div>
+
+			<aside>	
+				<div id="modes-button" class="input-group">
+				<ul>
+					<li><div class="radio-wrap third">
+						<input type="radio" value="polling" class="custom-radio" id="polling" name="mode" checked="true" />
+						<label for="polling">Polling</label>
+					</div></li>
+					<li><div class="radio-wrap third">
+						<input type="radio" value="longpolling" class="custom-radio" id="longpolling" name="mode"/>
+						<label for="longpolling">Long Polling</label>
+					</div><div class="radio-wrap third">
+						<input type="radio" value="push" class="custom-radio" id="push" name="mode"/>
+						<label for="push">Push</label>
+					</div></li>
+					<li></li>
+				</ul>
+					
+				</div>
+				<div id="users"></div>
+			</aside>
 		</div>
 
-		<div id="users"></div>
-	</div>
 
 
-
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script>
-	if (!window.jQuery) {
-		document.write('<script src="js/jquery-1.11.1.min.js"><\/script>');
-	}
-	</script>
-	<script src="/socket.io/socket.io.js"></script>
-	<script src="js/client.js"></script>
-</body>
-</html>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script>
+			if (!window.jQuery) {
+				document.write('<script src="js/jquery-1.11.1.min.js"><\/script>');
+			}
+		</script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="js/client.js"></script>
+	</body>
+	</html>
