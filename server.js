@@ -34,7 +34,7 @@ app.post('/login',function(req, res) {
 
 	users[user.id] = user;
 	
-	console.log("Nouvel utilisateur: "+user.id);
+	console.log("Nouvel utilisateur: "+user.id+":da");
 
 	res.send({
 		okay:true,
@@ -57,7 +57,6 @@ app.post('/sendMessage', function(req, res){
 	messages.push(message);
 
 	if(areSockClients()){
-		console.log('les sock y auront droit');
 		io.sockets.emit('newmessage', message);
 	}
 
@@ -141,13 +140,13 @@ app.post('/disconnect',function(req, res) {
 	var user = req.body.user;
 	
 
-	if(user.id == users[user.id].id){
+	if(users[user.id] != undefined){
 		console.log("utilisateur parti: "+user.id);
 		delete users[user.id];
-	}else{
-		console.log("user\n"+JSON.stringify(user));
-		console.log("users[user.id]\n"+JSON.stringify(users[user.id]));
+		io.sockets.emit('disconnected',user.id);
 
+	}else{
+		console.log("disconnect: error");
 	}
 
 	res.sendStatus(200);

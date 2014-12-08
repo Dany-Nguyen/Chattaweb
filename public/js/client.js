@@ -53,10 +53,11 @@
 
 				user.id = $('#pseudo').val();
 				
-				////////////////////////////////////SOCKETS
+				////////////////////////////////////////////////  SOCKETS EVENTS
 
 				socket.on('logged', function() {
 					logMe();
+
 				});
 
 				socket.on('newuser', function(user) {
@@ -71,10 +72,16 @@
 				socket.on('newmessage', function(message) {
 					addMessageView(message);
 				});
+				/////////////////////////////////////////////////////////
 
+				
 				socket.emit('login', {
 					pseudo: user.id
 				});
+				socket.emit('newmessage', {
+					message: " a rejoint la conversation" 
+				});		
+
 				break;
 			default:
 				alert("don't try me");
