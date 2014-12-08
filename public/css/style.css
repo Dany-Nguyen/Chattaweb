@@ -106,7 +106,7 @@ input.custom-radio:checked + label {
 	background-color:#bebebe;
 }
 
-#chat,#users,#chatchat {
+#chat,#users,#chatchat,#modes-button {
 	display:none;
 }
 
@@ -137,6 +137,12 @@ input.custom-radio:checked + label {
 
 	overflow: hidden;
 	text-overflow:ellipsis;
+}
+
+#modes-button {
+	position: fixed;
+	right: 0;
+	top: 50px;
 }
 
 #chat {
@@ -177,7 +183,6 @@ input.custom-radio:checked + label {
 	margin-left: 5px;
 }
 
-
 #chat-form input[type="checkbox"] {
 	display: none;
 }
@@ -206,6 +211,8 @@ input.custom-radio:checked + label {
 .mon-message {
 	color: #F9690E;
 }
+
+
 
 /*$('#chatchat').slideDown(400).delay(200).animate({
 			right : "0px",

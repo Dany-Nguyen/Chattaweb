@@ -205,6 +205,7 @@
 
 		setTimeout(function() {
 			$('#chat').fadeIn(400);
+			$('#modes-button').fadeIn(400);
 			$('#users').fadeIn(400);
 			$('#message').focus();
 			$('.chat-back').css({opacity:1});
