@@ -34,7 +34,7 @@ app.post('/login',function(req, res) {
 
 	users[user.id] = user;
 	
-	console.log("Nouvel utilisateur: "+user.id+":da");
+	console.log("Nouvel utilisateur: "+user.id);
 
 	res.send({
 		okay:true,
@@ -174,7 +174,7 @@ io.sockets.on('connection', function(socket) {
 	*/
 
 	socket.on('login', function(user) {
-		console.log("Nouvel utilisateur: "+JSON.stringify(user));
+		console.log("Nouvel utilisateur: "+user.id);
 
 		me = user;
 		me.id = user.pseudo;

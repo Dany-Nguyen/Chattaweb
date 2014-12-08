@@ -12,6 +12,7 @@
 			<form action="" id="login-form">
 				<div class="input-group">
 					<input type="text" name="login" id="pseudo" placeholder="Pseudo" required >
+					<div id="radio-group">
 					<div class="radio-wrap third">
 						<input type="radio" value="polling" class="custom-radio" id="polling" name="mode" checked="true" />
 						<label for="polling">Polling</label>
@@ -23,6 +24,7 @@
 					<div class="radio-wrap third">
 						<input type="radio" value="push" class="custom-radio" id="push" name="mode"/>
 						<label for="push">Push</label>
+					</div>
 					</div>
 					<input type="submit" value="Connexion">
 				</div>
@@ -55,24 +57,7 @@
 				</form>
 			</div>
 
-			<aside>	
-				<div id="modes-button" class="input-group">
-				<ul>
-					<li><div class="radio-wrap third">
-						<input type="radio" value="polling" class="custom-radio" id="polling" name="mode" checked="true" />
-						<label for="polling">Polling</label>
-					</div></li>
-					<li><div class="radio-wrap third">
-						<input type="radio" value="longpolling" class="custom-radio" id="longpolling" name="mode"/>
-						<label for="longpolling">Long Polling</label>
-					</div><div class="radio-wrap third">
-						<input type="radio" value="push" class="custom-radio" id="push" name="mode"/>
-						<label for="push">Push</label>
-					</div></li>
-					<li></li>
-				</ul>
-					
-				</div>
+			<aside id="aside">
 				<div id="users"></div>
 			</aside>
 		</div>

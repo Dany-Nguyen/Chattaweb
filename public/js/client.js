@@ -10,16 +10,19 @@
 
 	var socket;
 	var user = {};
-	var mode;
+	var mode = $('#radio-group :radio:checked').val();
 	var updateTimeout;
 
+	$('#radio-group :radio').change(function() {
+		mode = $(this).val();
+	});
 	/**
 	* Connexion d'un client
 	*/ 
 
 	$('#login-form').submit(function(event){
 		event.preventDefault();
-		mode = $(this).find('input[type=radio]:checked').val();
+		// mode = $(this).find('input[type=radio]:checked').val();
 
 		switch(mode){
 			case net.POLLING:
@@ -94,6 +97,8 @@
 			$('#chat-form').submit();
 		}
 	});
+
+
 
 
 	$('#chat-form').submit(function(event) {
@@ -210,6 +215,18 @@
 			$('#message').focus();
 			$('.chat-back').css({opacity:1});
 		}, 800);
+
+		var $switchMode = $('#radio-group').clone(true);
+		$('#radio-group').remove();
+		$switchMode.find('.third').removeClass("third");
+		$switchMode.addClass('stacked').prependTo('aside');
+
+		if(mode === net.PUSH){
+			$('#polling').attr('disabled','disabled');
+			$('#longpolling').attr('disabled','disabled');
+		}else{
+			$('#push').attr('disabled','disabled');
+		}
 	}
 
 	function updateView (msgs,users) {
@@ -270,14 +287,12 @@
 	$(window).bind("beforeunload", function(){
 		if(user.id != undefined){
 			destroy(user);
-			alert("so much win");
 		}
 	});
 
 	$(window).unload(function(){
 		if(user.id != undefined){
-			destroy(user);
-			alert("so much win");		
+			destroy(user);	
 		}
 	});
 
