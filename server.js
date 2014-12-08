@@ -131,9 +131,26 @@ app.post('/register-lp', function(req, res){
 			});
 			//////////////////////////////////////:
 		}
-	},10);
+	},10); // on  attends un peu, on est pas à la milliseconde près
 	
 });
+
+app.post('/disconnect',function(req, res) {
+	var user = req.body.user;
+	
+
+	if(user == users[user.id]){
+		console.log("utilisateur parti: "+user.id);
+		delete users[user.id];
+	}else{
+		console.log("user\n"+JSON.stringify(user));
+		console.log("users[user.id]\n"+JSON.stringify(users[user.id]));
+
+	}
+
+	res.sendStatus(200);
+});
+
 
 function areSockClients() {
 	return io.sockets.sockets.length > 0;
@@ -181,12 +198,13 @@ io.sockets.on('connection', function(socket) {
 		date = new Date();
 		message.heure = date.getHours();
 		message.minute = date.getMinutes();
+		console.log(messages);
 
-		// mettre a jour les messages globaux
-		console.log("sock:newm msgs.len:av : "+messages.length);
-		messages.push[message];
-		console.log("sock:newm msgs.len:aft : "+messages.length);
 		io.sockets.emit('newmessage', message);
+		
+		// mettre a jour les messages globaux
+		messages.push(message);
+
 	});
 
 });

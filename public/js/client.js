@@ -171,7 +171,7 @@
 				}
 			},
 			'error': function(e){
-				// console.log("update:ajax: error "+e);
+				console.log(e);
 			},complete : function (argument) {
 				updateTimeout = setTimeout(update,time);
 			}
@@ -241,7 +241,35 @@
 		$('#users').append('<div class="user" id="' + uid + '">' + uid + '</div>');
 	}
 
+	function destroy() {
+		$.ajax({
+			'url': 'disconnect',
+			'type': 'post',
+			'data': {
+				'user': user
+			},error: function(e){
+				console.log(e);
+				//reessayer ?
+			}
+		});
+	}
 
+
+	///unload : PB refresh auto sur les mobiles
+	// comment empeche un client de detrure les sessions des autres ???
+	$(window).bind("beforeunload", function(){
+		if(user.id != undefined){
+			destroy(user);
+			alert("so much win");
+		}
+	});
+
+	$(window).unload(function(){
+		if(user.id != undefined){
+			destroy(user);
+			alert("so much win");		
+		}
+	});
 
 })(jQuery);
 
