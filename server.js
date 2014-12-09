@@ -4,7 +4,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var bodyParser = require('body-parser');
 
-server.listen(80);
+server.listen(8080);
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());

@@ -10,12 +10,13 @@
 
 	var socket;
 	var user = {};
-	var mode = $('#radio-group :radio:checked').val();
+	var mode = $('#radio-group :radio:checked').val();	// Choix du mode de communication à la connexion
 	var updateTimeout;
 
 	$('#radio-group :radio').change(function() {
 		mode = $(this).val();
 	});
+
 	/**
 	* Connexion d'un client
 	*/ 
@@ -27,35 +28,35 @@
 		switch(mode){
 			case net.POLLING:
 			case net.LONGPOLLING:
-				$.ajax({
-					url : 'login',
-					type : 'post',
-					data : {
-						'user': $('#pseudo').val(),
-						'mode': mode
-					},
-					cache : false,
-					success : function(res){
-						if(res.okay){
-							user = res.me;
-							logMe();
-							update();
-							sendMessage(" a rejoint la conversation");
+			$.ajax({
+				url : 'login',
+				type : 'post',
+				data : {
+					'user': $('#pseudo').val(),
+					'mode': mode
+				},
+				cache : false,
+				success : function(res){
+					if(res.okay){
+						user = res.me;
+						logMe();
+						update();
+						sendMessage(" a rejoint la conversation");
 
-						}else {
-							alert("on va tous mourrir");
-						}
-					},
-					'error': function(e){
-						console.log("ca c'est mal passé\n"+e);
+					}else {
+						alert("on va tous mourir");
 					}
-				});
-				break;
+				},
+				'error': function(e){
+					console.log("ca c'est mal passé\n"+e);
+				}
+			});
+			break;
 			case net.PUSH:
-				socket = io.connect('http://localhost');
+			socket = io.connect('http://localhost');
 
-				user.id = $('#pseudo').val();
-				
+			user.id = $('#pseudo').val();
+
 				////////////////////////////////////////////////  SOCKETS EVENTS
 
 				socket.on('logged', function() {
@@ -86,11 +87,12 @@
 				});		
 
 				break;
-			default:
+				default:
 				alert("don't try me");
-		}
-	});
+			}
+		});
 
+	// Appuie sur le bouton Entrée pour saisir le message
 	$('#message').on('keyup', function(e) {
 		var checked = $('#check-enter').is(':checked');
 		if (checked && e.which == 13 && ! e.shiftKey) {	
@@ -100,7 +102,7 @@
 
 
 
-
+	// Gestion de la zone de saisie de texte pour l'envoi de message
 	$('#chat-form').submit(function(event) {
 		event.preventDefault();
 
@@ -109,19 +111,20 @@
 		switch(mode){
 			case net.POLLING:
 			case net.LONGPOLLING:
-				sendMessage(msg);
-				break;
+			sendMessage(msg);
+			break;
 			case net.PUSH:
-				socket.emit('newmessage', {message: msg });		
-				break;
+			socket.emit('newmessage', {message: msg });		
+			break;
 			default:
-				alert("don't try my submit");
+			alert("don't try my submit");
 		}
 
 		$('#message').val('');
 		$('#message').focus();
 	});
 
+	// Gestion de l'envoi du message
 	function sendMessage (message) {
 		$.ajax({
 			url : 'sendMessage',
@@ -135,11 +138,11 @@
 				if(res.okay){
 					if(mode === net.POLLING){ update();}
 				}else {
-					alert("on va tous mourrir:sendMessage");
+					alert("on va tous mourir:sendMessage");
 				}
 			},
 			'error': function(e){
-				console.log("sendMessage:ajax: ca c'est mal passé\n");
+				console.log("sendMessage:ajax: ça s'est mal passé\n");
 			}
 		});
 	}
@@ -148,7 +151,7 @@
 	
 
 	function update() {
-		//empecher l'existence de deux appels simultanés à update
+		// Empecher l'existence de deux appels simultanés à update
 		clearTimeout(updateTimeout);
 
 		// console.log("going to update :");
@@ -181,7 +184,7 @@
 				}else if(res.timeout) {
 					console.log("timeout LP");
 				}else{
-					alert("update:ajax: on va tous mourrir !");
+					alert("update:ajax: on va tous mourir !");
 				}
 			},
 			'error': function(e){
@@ -193,6 +196,9 @@
 	}
 
 
+	/**
+	* Animations fancy à ma connexion
+	*/
 	function logMe () {
 		$('#login').slideUp(400);
 		$('#chatchat').slideDown(400).delay(200).animate({
@@ -216,6 +222,7 @@
 			$('.chat-back').css({opacity:1});
 		}, 800);
 
+		// Clone des boutons de mode de communication
 		var $switchMode = $('#radio-group').clone(true);
 		$('#radio-group').remove();
 		$switchMode.find('.third').removeClass("third");
@@ -259,15 +266,20 @@
 		//je pourrais fair un seul parcours (double) plutot que deux mais c'est que n²+n² environ donc ca va
 	}
 
+	// Affichage message
 	function addMessageView(msg) {
+		// Si c'est moi, changer la couleur du nom
 		var isme = (msg.user == user.id) ? "mon-message" : "";
+		// auteur (date) : message
 		$('#chat-messages').append('<li> <span class="'+isme+'"><b>' + msg.user + '</b> (' + msg.heure + 'h' + msg.minute + ') :</span> ' + msg.message + '</li>');
 	}
 
+	// Ajout utilisateur dans la liste des connectés
 	function addUserView(uid) {
 		$('#users').append('<div class="user" id="' + uid + '">' + uid + '</div>');
 	}
 
+	// Deconnexion d'un utilisateur
 	function destroy() {
 		$.ajax({
 			'url': 'disconnect',
