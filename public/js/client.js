@@ -14,15 +14,26 @@
 	var updateTimeout;
 
 	$('#radio-group :radio').change(function() {
+		var old = mode;
 		mode = $(this).val();
+		if( mode === net.PUSH ){
+			console.log("on change de monde");
+			clearTimeout(updateTimeout);
+			updateTimeout = null;
+			initSocket();
+
+		}else if( old === net.PUSH && mode != net.PUSH){ //la 2e condition c'est parce que j'ai pas confiance en l'evennement 'change'
+			convertUser($('#pseudo').val());
+		}
+
 	});
+
 	/**
 	* Connexion d'un client
 	*/ 
 
 	$('#login-form').submit(function(event){
 		event.preventDefault();
-		// mode = $(this).find('input[type=radio]:checked').val();
 
 		switch(mode){
 			case net.POLLING:
@@ -47,37 +58,16 @@
 						}
 					},
 					'error': function(e){
-						console.log("ca c'est mal passé\n"+e);
+						console.log("login.submit: ca c'est mal passé\n"+e);
 					}
 				});
 				break;
 			case net.PUSH:
-				socket = io.connect('http://localhost');
 
 				user.id = $('#pseudo').val();
 				
-				////////////////////////////////////////////////  SOCKETS EVENTS
+				initSocket();
 
-				socket.on('logged', function() {
-					logMe();
-
-				});
-
-				socket.on('newuser', function(user) {
-					addUserView(user)
-				});
-
-				socket.on('disconnected', function(user) {
-					$('#' + user).remove();
-				});
-
-				/** Affichage nouveau message */
-				socket.on('newmessage', function(message) {
-					addMessageView(message);
-				});
-				/////////////////////////////////////////////////////////
-
-				
 				socket.emit('login', {
 					pseudo: user.id
 				});
@@ -122,6 +112,35 @@
 		$('#message').focus();
 	});
 
+	function initSocket (argument) {
+		
+		if(socket == undefined) {
+			socket = io.connect('http://localhost');
+
+			socket.on('logged', function() {
+				logMe();
+
+			});
+
+			socket.on('newuser', function(user) {
+				if($('#users #'+user).length > 0){
+					console.log(user +" existe deja");
+				}else{
+					addUserView(user)
+				}
+			});
+
+			socket.on('disconnected', function(user) {
+				$('#' + user).remove();
+			});
+
+			/** Affichage nouveau message */
+			socket.on('newmessage', function(message) {
+				addMessageView(message);
+			});
+		}
+	}
+
 	function sendMessage (message) {
 		$.ajax({
 			url : 'sendMessage',
@@ -148,10 +167,10 @@
 	
 
 	function update() {
-		//empecher l'existence de deux appels simultanés à update
+		// empecher l'existence de deux appels simultanés à update
 		clearTimeout(updateTimeout);
+		updateTimeout = null;
 
-		// console.log("going to update :");
 		var addr;
 		var time;
 		if(mode === "polling"){
@@ -184,10 +203,27 @@
 					alert("update:ajax: on va tous mourrir !");
 				}
 			},
-			'error': function(e){
+			error: function(e){
 				console.log(e);
 			},complete : function (argument) {
 				updateTimeout = setTimeout(update,time);
+			}
+		});
+	}
+
+	function convertUser(id) {
+		$.ajax({
+			url : 'convertUser',
+			type : 'post',
+			cache : false,
+			data : {
+				'user': id,
+			},
+			success : function(res){
+				user = res.user;
+			},
+			error: function(e){
+				console.log(e);
 			}
 		});
 	}
@@ -221,12 +257,6 @@
 		$switchMode.find('.third').removeClass("third");
 		$switchMode.addClass('stacked').prependTo('aside');
 
-		if(mode === net.PUSH){
-			$('#polling').attr('disabled','disabled');
-			$('#longpolling').attr('disabled','disabled');
-		}else{
-			$('#push').attr('disabled','disabled');
-		}
 	}
 
 	function updateView (msgs,users) {
@@ -241,7 +271,7 @@
 	function updateUsers (users) {
 		var oldUsers = [];
 
-		//enlever les users qui ne sont plus la (et acesoirement recuperer les uid de ce qui sont la dans)
+		//enlever les users qui ne sont plus la (et accesoirement recuperer les uid de ceux qui sont la dans)
 		$('#users .user').each(function() {
 			oldUsers.push(this.id);
 			if($.inArray( this.id, users) == -1){

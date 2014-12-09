@@ -20,17 +20,14 @@ var users = {};
 var messages = [];
 
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+	res.sendFile(__dirname + '/index.html');
 });
-
 
 app.post('/login',function(req, res) {
 	var user = {};
 
 	user.id = req.body.user;
 	user.version = messages.length;
-	user.mode = req.body.mode;
-	// user.pm = [];
 
 	users[user.id] = user;
 	
@@ -43,6 +40,14 @@ app.post('/login',function(req, res) {
 	});	
 });
 
+app.post('/convertUser', function(req, res){
+	var user = {};
+	console.log(JSON.stringify(req.body));
+	user.id = req.body.user;
+	user.version = messages.length;
+	console.log(JSON.stringify(user));
+	res.send({user : user});
+});
 
 app.post('/sendMessage', function(req, res){
 	var message = {};
@@ -174,8 +179,15 @@ io.sockets.on('connection', function(socket) {
 	*/
 
 	socket.on('login', function(user) {
-		console.log("Nouvel utilisateur: "+user.id);
+		console.log("Nouvel utilisateur: "+user.pseudo);
 
+		if(user.id in users){
+			console.log("on va pas tout faire");
+
+		}else{
+			console.log("on peux inserer")
+
+		}
 		me = user;
 		me.id = user.pseudo;
 		users[me.id] = me;
@@ -199,7 +211,6 @@ io.sockets.on('connection', function(socket) {
 		date = new Date();
 		message.heure = date.getHours();
 		message.minute = date.getMinutes();
-		console.log(messages);
 
 		io.sockets.emit('newmessage', message);
 		
