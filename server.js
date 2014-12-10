@@ -183,20 +183,20 @@ io.sockets.on('connection', function(socket) {
 	*/
 
 	socket.on('login', function(user) {
-		console.log("Nouvel utilisateur: "+user.pseudo);
 
-		if(user.id in users){
-			console.log("on va pas tout faire");
+		me = user;
+		// me.id = user.id;
+
+		if(users[user.id] == undefined){
+			users[me.id] = me;
+			socket.emit('logged');
+			io.sockets.emit('newuser', me.id);
+
+			console.log("Nouvel utilisateur: "+me.id);
 
 		}else{
-			console.log("on peux inserer")
-
+			console.log("on:login: changed mode of "+me.id);
 		}
-		me = user;
-		me.id = user.pseudo;
-		users[me.id] = me;
-		socket.emit('logged');
-		io.sockets.emit('newuser', me.id);
 	});
 
 	socket.on('disconnect', function() {
@@ -212,10 +212,12 @@ io.sockets.on('connection', function(socket) {
 	*/
 	socket.on('newmessage', function(message) {
 		message.user = me.id;
+		
+		console.log(JSON.stringify(me));
+
 		date = new Date();
 		message.heure = date.getHours();
 		message.minute = date.getMinutes();
-
 		io.sockets.emit('newmessage', message);
 		
 		// mettre a jour les messages globaux

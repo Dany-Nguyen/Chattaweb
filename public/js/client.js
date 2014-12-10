@@ -22,6 +22,9 @@
 			clearTimeout(updateTimeout);
 			updateTimeout = null;
 			initSocket();
+			socket.emit('login', {
+				id: user.id
+			});
 
 		}else if( old === net.PUSH && mode != net.PUSH){ //la 2e condition c'est parce que j'ai pas confiance en l'evennement 'change'
 			convertUser($('#pseudo').val());
@@ -70,7 +73,7 @@
 				initSocket();
 
 				socket.emit('login', {
-					pseudo: user.id
+					id: user.id
 				});
 				socket.emit('newmessage', {
 					message: " a rejoint la conversation" 
