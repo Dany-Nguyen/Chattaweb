@@ -21,10 +21,15 @@
 			console.log("on change de monde");
 			clearTimeout(updateTimeout);
 			updateTimeout = null;
+			
 			initSocket();
-			socket.emit('login', {
-				id: user.id
-			});
+
+			if(user.id != undefined){
+				socket.emit('login', {
+					id: user.id
+				});	
+			}
+			
 
 		}else if( old === net.PUSH && mode != net.PUSH){ //la 2e condition c'est parce que j'ai pas confiance en l'evennement 'change'
 			convertUser($('#pseudo').val());
